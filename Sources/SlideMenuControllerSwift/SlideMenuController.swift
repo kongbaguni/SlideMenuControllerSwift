@@ -1103,6 +1103,7 @@ extension UIViewController {
 
 #endif
 
+@available(iOS 13.0, *)
 struct SlideMenuControllerWrapper : UIViewControllerRepresentable {
     class Coordinator {
         var parent: SlideMenuControllerWrapper
@@ -1122,6 +1123,7 @@ struct SlideMenuControllerWrapper : UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: SlideMenuController, context: Context) {}
 }
 
+@available(iOS 13.0, *)
 #Preview {
     VStack {
         
