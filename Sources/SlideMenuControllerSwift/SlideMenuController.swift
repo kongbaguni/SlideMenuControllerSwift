@@ -94,7 +94,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         self.init()
         self.mainViewController = mainViewController
         leftViewController = leftMenuViewController
-        Task { @MainActor in
+        DispatchQueue.main.async {
             self.initView()
         }
     }
@@ -103,7 +103,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         self.init()
         self.mainViewController = mainViewController
         rightViewController = rightMenuViewController
-        Task { @MainActor in
+        DispatchQueue.main.async {
             self.initView()
         }
     }
@@ -113,13 +113,13 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         self.mainViewController = mainViewController
         leftViewController = leftMenuViewController
         rightViewController = rightMenuViewController
-        Task { @MainActor in
+        DispatchQueue.main.async {
             self.initView()
         }
     }
     
     open override func awakeFromNib() {
-        Task { @MainActor in
+        DispatchQueue.main.async { 
             self.initView()
         }
     }
