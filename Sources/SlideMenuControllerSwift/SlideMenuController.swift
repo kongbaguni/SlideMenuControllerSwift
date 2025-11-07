@@ -1130,14 +1130,3 @@ extension UIViewController {
         }
     }
 }
-
-
-
-import SwiftUI
-#Preview {
-    VStack {
-        NavigationViewController().toPreview()
-        //NavigationViewController().a.toPreview()
-        //NavigationViewController().b.toPreview()
-    }
-}
