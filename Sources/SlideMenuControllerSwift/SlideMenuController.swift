@@ -7,7 +7,6 @@
 import Foundation
 #if canImport(UIKit)
 import UIKit
-import SwiftUI
 
 @objc public protocol SlideMenuControllerDelegate {
     @objc optional func leftWillOpen()
@@ -20,27 +19,27 @@ import SwiftUI
     @objc optional func rightDidClose()
 }
 
-@MainActor public struct SlideMenuOptions {
-    public static var leftViewWidth: CGFloat = 270.0
-    public static var leftBezelWidth: CGFloat? = 16.0
-    public static var contentViewScale: CGFloat = 0.96
-    public static var contentViewOpacity: CGFloat = 0.5
-    public static var contentViewDrag: Bool = false
-    public static var shadowOpacity: CGFloat = 0.0
-    public static var shadowRadius: CGFloat = 0.0
-    public static var shadowOffset: CGSize = CGSize(width: 0,height: 0)
-    public static var panFromBezel: Bool = true
-    public static var animationDuration: CGFloat = 0.4
-    public static var animationOptions: UIView.AnimationOptions = []
-    public static var rightViewWidth: CGFloat = 270.0
-    public static var rightBezelWidth: CGFloat? = 16.0
-    public static var rightPanFromBezel: Bool = true
-    public static var hideStatusBar: Bool = true
-    public static var pointOfNoReturnWidth: CGFloat = 44.0
-    public static var simultaneousGestureRecognizers: Bool = true
-	public static var opacityViewBackgroundColor: UIColor = UIColor.black
-    public static var panGesturesEnabled: Bool = true
-    public static var tapGesturesEnabled: Bool = true
+public struct SlideMenuOptions {
+    nonisolated(unsafe) public static var leftViewWidth: CGFloat = 270.0
+    nonisolated(unsafe) public static var leftBezelWidth: CGFloat? = 16.0
+    nonisolated(unsafe) public static var contentViewScale: CGFloat = 0.96
+    nonisolated(unsafe) public static var contentViewOpacity: CGFloat = 0.5
+    nonisolated(unsafe) public static var contentViewDrag: Bool = false
+    nonisolated(unsafe) public static var shadowOpacity: CGFloat = 0.0
+    nonisolated(unsafe) public static var shadowRadius: CGFloat = 0.0
+    nonisolated(unsafe) public static var shadowOffset: CGSize = CGSize(width: 0,height: 0)
+    nonisolated(unsafe) public static var panFromBezel: Bool = true
+    nonisolated(unsafe) public static var animationDuration: CGFloat = 0.4
+    nonisolated(unsafe) public static var animationOptions: UIView.AnimationOptions = []
+    nonisolated(unsafe) public static var rightViewWidth: CGFloat = 270.0
+    nonisolated(unsafe) public static var rightBezelWidth: CGFloat? = 16.0
+    nonisolated(unsafe) public static var rightPanFromBezel: Bool = true
+    nonisolated(unsafe) public static var hideStatusBar: Bool = true
+    nonisolated(unsafe) public static var pointOfNoReturnWidth: CGFloat = 44.0
+    nonisolated(unsafe) public static var simultaneousGestureRecognizers: Bool = true
+    nonisolated(unsafe) public static var opacityViewBackgroundColor: UIColor = UIColor.black
+    nonisolated(unsafe) public static var panGesturesEnabled: Bool = true
+    nonisolated(unsafe) public static var tapGesturesEnabled: Bool = true
 }
 
 open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
@@ -94,18 +93,14 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         self.init()
         self.mainViewController = mainViewController
         leftViewController = leftMenuViewController
-        DispatchQueue.main.async {
-            self.initView()
-        }
+        self.initView()
     }
     
     public convenience init(mainViewController: UIViewController, rightMenuViewController: UIViewController) {
         self.init()
         self.mainViewController = mainViewController
         rightViewController = rightMenuViewController
-        DispatchQueue.main.async {
-            self.initView()
-        }
+        self.initView()
     }
     
     public convenience init(mainViewController: UIViewController, leftMenuViewController: UIViewController, rightMenuViewController: UIViewController) {
@@ -113,9 +108,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         self.mainViewController = mainViewController
         leftViewController = leftMenuViewController
         rightViewController = rightMenuViewController
-        DispatchQueue.main.async {
-            self.initView()
-        }
+        self.initView()
     }
     
     open override func awakeFromNib() {
@@ -361,13 +354,13 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         // Please to override it if necessary
     }
     
-    @MainActor
+    
     struct LeftPanState {
-        static var frameAtStartOfPan: CGRect = CGRect.zero
-        static var startPointOfPan: CGPoint = CGPoint.zero
-        static var wasOpenAtStartOfPan: Bool = false
-        static var wasHiddenAtStartOfPan: Bool = false
-        static var lastState: UIGestureRecognizer.State = .ended
+        nonisolated(unsafe) static var frameAtStartOfPan: CGRect = CGRect.zero
+        nonisolated(unsafe) static var startPointOfPan: CGPoint = CGPoint.zero
+        nonisolated(unsafe) static var wasOpenAtStartOfPan: Bool = false
+        nonisolated(unsafe) static var wasHiddenAtStartOfPan: Bool = false
+        nonisolated(unsafe) static var lastState: UIGestureRecognizer.State = .ended
     }
     
     @objc func handleLeftPanGesture(_ panGesture: UIPanGestureRecognizer) {
@@ -444,13 +437,13 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         LeftPanState.lastState = panGesture.state
     }
     
-    @MainActor
+    
     struct RightPanState {
-        static var frameAtStartOfPan: CGRect = CGRect.zero
-        static var startPointOfPan: CGPoint = CGPoint.zero
-        static var wasOpenAtStartOfPan: Bool = false
-        static var wasHiddenAtStartOfPan: Bool = false
-        static var lastState: UIGestureRecognizer.State = .ended
+        nonisolated(unsafe) static var frameAtStartOfPan: CGRect = CGRect.zero
+        nonisolated(unsafe) static var startPointOfPan: CGPoint = CGPoint.zero
+        nonisolated(unsafe) static var wasOpenAtStartOfPan: Bool = false
+        nonisolated(unsafe) static var wasHiddenAtStartOfPan: Bool = false
+        nonisolated(unsafe) static var lastState: UIGestureRecognizer.State = .ended
     }
     
     @objc func handleRightPanGesture(_ panGesture: UIPanGestureRecognizer) {
@@ -1102,31 +1095,3 @@ extension UIViewController {
 }
 
 #endif
-
-@available(iOS 13.0, *)
-struct SlideMenuControllerWrapper : UIViewControllerRepresentable {
-    class Coordinator {
-        var parent: SlideMenuControllerWrapper
-        init(_ parent: SlideMenuControllerWrapper) { self.parent = parent }
-    }
-    
-    func makeCoordinator() -> Coordinator {
-        Coordinator(self)
-    }
-    
-    func makeUIViewController(context: Context) -> SlideMenuController {
-        let vc = SlideMenuController()
-        // vc.delegate = context.coordinator 등 연결 가능
-        return vc
-    }
-    
-    func updateUIViewController(_ uiViewController: SlideMenuController, context: Context) {}
-}
-
-@available(iOS 13.0, *)
-#Preview {
-    VStack {
-        
-        SlideMenuControllerWrapper()
-    }
-}
