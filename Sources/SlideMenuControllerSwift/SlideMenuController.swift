@@ -74,13 +74,25 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     open var mainContainerView = UIView()
     open var leftContainerView = UIView()
     open var rightContainerView =  UIView()
-    open var mainViewController: UIViewController?
-    open var leftViewController: UIViewController?
-    open var leftPanGesture: UIPanGestureRecognizer?
-    open var leftTapGesture: UITapGestureRecognizer?
-    open var rightViewController: UIViewController?
-    open var rightPanGesture: UIPanGestureRecognizer?
-    open var rightTapGesture: UITapGestureRecognizer?
+    open var mainViewController: UIViewController? = nil
+    open var leftViewController: UIViewController? = nil
+    open var leftPanGesture: UIPanGestureRecognizer? = nil
+    open var leftTapGesture: UITapGestureRecognizer? = nil
+    open var rightViewController: UIViewController? = nil
+    open var rightPanGesture: UIPanGestureRecognizer? = nil
+    open var rightTapGesture: UITapGestureRecognizer? = nil
+    
+    public func setMainViewController(_ viewController: UIViewController) {
+        self.mainViewController = viewController
+    }
+    
+    public func setLeftViewController(_ viewController: UIViewController) {
+        self.leftViewController = viewController
+    }
+    
+    public func setRightViewController(_ viewController: UIViewController) {
+        self.rightViewController = viewController
+    }
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -124,14 +136,20 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
 
     deinit { }
     
-    open func initView() {
-        
+
+    var refCount: Int = 0
+    private func initView() {
+        if refCount > 0 {
+            print("finish")
+            return
+        }
+        print("test", #line, refCount)
         mainContainerView = UIView(frame: view.bounds)
         mainContainerView.backgroundColor = UIColor.clear
         mainContainerView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
         view.insertSubview(mainContainerView, at: 0)
-
-      var opacityframe: CGRect = view.bounds
+        
+        var opacityframe: CGRect = view.bounds
         let opacityOffset: CGFloat = 0
         opacityframe.origin.y = opacityframe.origin.y + opacityOffset
         opacityframe.size.height = opacityframe.size.height - opacityOffset
@@ -140,34 +158,41 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         opacityView.autoresizingMask = [UIView.AutoresizingMask.flexibleHeight, UIView.AutoresizingMask.flexibleWidth]
         opacityView.layer.opacity = 0.0
         view.insertSubview(opacityView, at: 1)
-      
-      if leftViewController != nil {
-        var leftFrame: CGRect = view.bounds
-        leftFrame.size.width = SlideMenuOptions.leftViewWidth
-        leftFrame.origin.x = leftMinOrigin()
-        let leftOffset: CGFloat = 0
-        leftFrame.origin.y = leftFrame.origin.y + leftOffset
-        leftFrame.size.height = leftFrame.size.height - leftOffset
-        leftContainerView = UIView(frame: leftFrame)
-        leftContainerView.backgroundColor = UIColor.clear
-          leftContainerView.autoresizingMask = UIView.AutoresizingMask.flexibleHeight
-        view.insertSubview(leftContainerView, at: 2)
-        addLeftGestures()
-      }
-      
-      if rightViewController != nil {
-        var rightFrame: CGRect = view.bounds
-        rightFrame.size.width = SlideMenuOptions.rightViewWidth
-        rightFrame.origin.x = rightMinOrigin()
-        let rightOffset: CGFloat = 0
-        rightFrame.origin.y = rightFrame.origin.y + rightOffset
-        rightFrame.size.height = rightFrame.size.height - rightOffset
-        rightContainerView = UIView(frame: rightFrame)
-        rightContainerView.backgroundColor = UIColor.clear
-          rightContainerView.autoresizingMask = UIView.AutoresizingMask.flexibleHeight
-        view.insertSubview(rightContainerView, at: 3)
-        addRightGestures()
-      }
+        print("test", #line, refCount)
+
+        if leftViewController != nil {
+            print("test left in ", #line)
+            var leftFrame: CGRect = view.bounds
+            leftFrame.size.width = SlideMenuOptions.leftViewWidth
+            leftFrame.origin.x = leftMinOrigin()
+            let leftOffset: CGFloat = 0
+            leftFrame.origin.y = leftFrame.origin.y + leftOffset
+            leftFrame.size.height = leftFrame.size.height - leftOffset
+            leftContainerView = UIView(frame: leftFrame)
+            leftContainerView.backgroundColor = UIColor.clear
+            leftContainerView.autoresizingMask = UIView.AutoresizingMask.flexibleHeight
+            view.insertSubview(leftContainerView, at: 2)
+            addLeftGestures()
+            refCount += 1
+        }
+        
+        if rightViewController != nil {
+            print("test right in", #line)
+            var rightFrame: CGRect = view.bounds
+            rightFrame.size.width = SlideMenuOptions.rightViewWidth
+            rightFrame.origin.x = rightMinOrigin()
+            let rightOffset: CGFloat = 0
+            rightFrame.origin.y = rightFrame.origin.y + rightOffset
+            rightFrame.size.height = rightFrame.size.height - rightOffset
+            rightContainerView = UIView(frame: rightFrame)
+            rightContainerView.backgroundColor = UIColor.clear
+            rightContainerView.autoresizingMask = UIView.AutoresizingMask.flexibleHeight
+            view.insertSubview(rightContainerView, at: 3)
+            addRightGestures()
+            refCount += 1
+        }
+        print("test", #line, refCount)
+
     }
   
     open override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -201,8 +226,14 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
 
     override open func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
         //automatically called
         //self.mainViewController?.viewWillAppear(animated)
+    }
+    
+    open override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        initView()
     }
     
     open override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
@@ -1106,7 +1137,7 @@ import SwiftUI
 #Preview {
     VStack {
         NavigationViewController().toPreview()
-        NavigationViewController().a.toPreview()
-        NavigationViewController().b.toPreview()
+        //NavigationViewController().a.toPreview()
+        //NavigationViewController().b.toPreview()
     }
 }

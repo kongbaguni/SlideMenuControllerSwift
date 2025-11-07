@@ -40,10 +40,15 @@ class NavigationViewController : SlideMenuController {
     let a = ColoredViewController(color: .red)
     let b = ColoredViewController(color: .yellow)
     override func viewDidLoad() {
-        self.mainViewController = a
-        self.leftViewController = b
+        setMainViewController(self.a)
+        setLeftViewController(self.b)
+        SlideMenuOptions.contentViewScale = 1
+        SlideMenuOptions.rightViewWidth = 280
+
         super.viewDidLoad()
+        
     }
+
 }
 
 
