@@ -44,6 +44,7 @@ public struct SlideMenuOptions {
 
 open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
 
+    
     public enum SlideAction {
         case open
         case close
@@ -83,10 +84,12 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        view.backgroundColor = UIColor.black
     }
     
     public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
         super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        initView()
     }
     
     public convenience init(mainViewController: UIViewController, leftMenuViewController: UIViewController) {
@@ -115,12 +118,14 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         DispatchQueue.main.async { [weak self] in
             self?.initView()
         }
+        
         super.awakeFromNib()
     }
 
     deinit { }
     
     open func initView() {
+        
         mainContainerView = UIView(frame: view.bounds)
         mainContainerView.backgroundColor = UIColor.clear
         mainContainerView.autoresizingMask = [.flexibleHeight, .flexibleWidth]
@@ -531,7 +536,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
         
         var duration: TimeInterval = Double(SlideMenuOptions.animationDuration)
         if velocity != 0.0 {
-            duration = Double(fabs(xOrigin - finalXOrigin) / velocity)
+            duration = Double(abs(xOrigin - finalXOrigin) / velocity)
             duration = Double(fmax(0.1, fmin(1.0, duration)))
         }
         
@@ -565,7 +570,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
         var duration: TimeInterval = Double(SlideMenuOptions.animationDuration)
         if velocity != 0.0 {
-            duration = Double(fabs(xOrigin - view.bounds.width) / velocity)
+            duration = Double(abs(xOrigin - view.bounds.width) / velocity)
             duration = Double(fmax(0.1, fmin(1.0, duration)))
         }
     
@@ -597,7 +602,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
         var duration: TimeInterval = Double(SlideMenuOptions.animationDuration)
         if velocity != 0.0 {
-            duration = Double(fabs(xOrigin - finalXOrigin) / velocity)
+            duration = Double(abs(xOrigin - finalXOrigin) / velocity)
             duration = Double(fmax(0.1, fmin(1.0, duration)))
         }
         
@@ -628,7 +633,7 @@ open class SlideMenuController: UIViewController, UIGestureRecognizerDelegate {
     
         var duration: TimeInterval = Double(SlideMenuOptions.animationDuration)
         if velocity != 0.0 {
-            duration = Double(fabs(xOrigin - view.bounds.width) / velocity)
+            duration = Double(abs(xOrigin - view.bounds.width) / velocity)
             duration = Double(fmax(0.1, fmin(1.0, duration)))
         }
     
@@ -1092,5 +1097,16 @@ extension UIViewController {
         for recognizer in recognizers where recognizer is UIPanGestureRecognizer {
             targetScrollView.panGestureRecognizer.require(toFail: recognizer)
         }
+    }
+}
+
+
+
+import SwiftUI
+#Preview {
+    VStack {
+        NavigationViewController().toPreview()
+        NavigationViewController().a.toPreview()
+        NavigationViewController().b.toPreview()
     }
 }
